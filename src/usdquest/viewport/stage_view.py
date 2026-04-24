@@ -2,7 +2,7 @@
 
 StageView is the same Hydra-backed viewport that powers Pixar's `usdview`. We reuse
 its UsdviewDataModel (selection, viewer settings) and StageView widget directly —
-the narrative shell in Pixel Forge skins around it, it does not replace it.
+the narrative shell in USD Quest skins around it, it does not replace it.
 """
 from __future__ import annotations
 
@@ -17,10 +17,10 @@ from pxr.Usdviewq.settings import Settings
 from pxr.Usdviewq.stageView import StageView
 
 
-_SETTINGS_VERSION = "pixelforge-0"
+_SETTINGS_VERSION = "usdquest-0"
 
 
-class PixelForgeStageView(QtWidgets.QWidget):
+class USDQuestStageView(QtWidgets.QWidget):
     """Container widget that owns a Usd.Stage and a Usdviewq.StageView."""
 
     def __init__(self, parent: QtWidgets.QWidget | None = None) -> None:

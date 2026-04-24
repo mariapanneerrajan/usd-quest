@@ -16,7 +16,7 @@ _BOOTSTRAPPED = False
 
 def _dev_usd_root() -> Path | None:
     # Honor an explicit override first.
-    override = os.environ.get("PIXELFORGE_USD_ROOT")
+    override = os.environ.get("USDQUEST_USD_ROOT")
     if override:
         p = Path(override)
         if p.exists():
@@ -48,12 +48,12 @@ def bootstrap() -> Path:
     global _BOOTSTRAPPED
     if _BOOTSTRAPPED:
         # Return whatever we chose last time.
-        return Path(os.environ["PIXELFORGE_USD_ROOT"])
+        return Path(os.environ["USDQUEST_USD_ROOT"])
 
     root = _packaged_usd_root() or _dev_usd_root()
     if root is None:
         raise RuntimeError(
-            "Could not locate an OpenUSD install. Set PIXELFORGE_USD_ROOT to the "
+            "Could not locate an OpenUSD install. Set USDQUEST_USD_ROOT to the "
             "USDinst directory, or install USD at C:\\code\\open_usd\\USDinst."
         )
 
@@ -83,10 +83,10 @@ def bootstrap() -> Path:
             [str(plugin_dir)] + ([existing_plug] if existing_plug else [])
         )
 
-    os.environ["PIXELFORGE_USD_ROOT"] = str(root)
+    os.environ["USDQUEST_USD_ROOT"] = str(root)
     _BOOTSTRAPPED = True
     return root
 
 
 def resolved_root() -> Path:
-    return Path(os.environ["PIXELFORGE_USD_ROOT"])
+    return Path(os.environ["USDQUEST_USD_ROOT"])
