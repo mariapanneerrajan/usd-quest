@@ -1,0 +1,26 @@
+[project]
+name = "pixelforge"
+version = "0.1.0"
+description = "Pixel Forge — a gamified OpenUSD mastery desktop game."
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "PySide6>=6.6,<6.9",
+    "PyOpenGL>=3.1.7",
+    "PyYAML>=6.0",
+    "numpy>=1.26,<3",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pixelforge"]
+
+[tool.uv]
+# The embedded OpenUSD build at C:\code\open_usd\USDinst was compiled against
+# C:\Python310\python.exe. Pin uv to that interpreter so the pxr python bindings load.
+python-preference = "only-system"
+
+[project.scripts]
+pixelforge = "pixelforge.app:main"
