@@ -2,9 +2,46 @@ id: act1_m01_hello_stage
 act: 1
 title: "Hello, Stage"
 story: |
-  Welcome to the studio. Your first task is dead simple:
-  open the starter file and author a single Cube prim at /World/Cube.
-  Everything in OpenUSD starts with a prim — this one's yours.
+  Welcome to Studio One. Your first task is the OpenUSD equivalent of "hello world":
+  author a single Cube inside a /World group, and mark /World as the stage's default.
+
+lesson: |
+  ### What you're learning
+  - A **Stage** (`Usd.Stage`) is a composed scene. On disk it lives in one or more
+    **Layer** files — the most common extension is `.usda` (text) or `.usdc` (binary).
+  - A Stage is a tree of **Prims** (primitives). Every prim has a unique path like
+    `/World` or `/World/Cube`.
+  - Each prim has a **typeName** — the schema it conforms to. `Xform` is a transform
+    group. `Cube` is a built-in procedural primitive shape (OpenUSD ships Cube, Sphere,
+    Cylinder, Cone, Capsule, Plane — so you never have to "model" at this stage).
+  - The `defaultPrim` tells tools which prim to use when this file is *referenced*
+    from elsewhere. Most assets set it.
+
+  ### The `.usda` syntax, in four lines
+  ```
+  #usda 1.0                     <- file header, always first line
+  (
+      defaultPrim = "World"     <- stage metadata, goes in (...)
+  )
+  def Xform "World"             <- defines prim /World as an Xform
+  {
+      def Cube "Cube" { }       <- defines prim /World/Cube as a Cube
+  }
+  ```
+  Open the editor panel (bottom of the window), replace its contents with the
+  above, and press **Ctrl+S** (or click Save). The viewport will redraw. Then
+  click **Grade mission**.
+
+  ### Want to go deeper?
+  - OpenUSD intro: <https://openusd.org/release/intro.html>
+  - `.usda` text format reference: <https://openusd.org/release/glossary.html>
+
+hints:
+  - "Start with `#usda 1.0` on the first line — every `.usda` file needs this."
+  - "Stage-level metadata like `defaultPrim` lives inside parentheses right after the header: `( defaultPrim = \"World\" )`."
+  - "`def Xform \"World\" { ... }` creates /World. Nest `def Cube \"Cube\" { }` inside it to get /World/Cube."
+  - "After editing, press Ctrl+S (or the Save button) — the grader reads what's on disk."
+
 starter_stage: starter.usda
 target_stage: player.usda
 objectives:
@@ -12,22 +49,22 @@ objectives:
     description: "/World is defined as an Xform"
     check: |
       prim = stage.GetPrimAtPath("/World")
-      assert prim and prim.IsValid(), "No /World prim"
-      assert prim.GetTypeName() == "Xform", f"/World must be an Xform, got {prim.GetTypeName()!r}"
+      assert prim and prim.IsValid(), "No /World prim — add `def Xform \"World\" { ... }`."
+      assert prim.GetTypeName() == "Xform", f"/World must be an Xform, got {prim.GetTypeName()!r}."
 
   - id: cube_exists
     description: "/World/Cube is a Cube prim"
     check: |
       prim = stage.GetPrimAtPath("/World/Cube")
-      assert prim and prim.IsValid(), "No /World/Cube prim"
-      assert prim.GetTypeName() == "Cube", f"/World/Cube must be a Cube, got {prim.GetTypeName()!r}"
+      assert prim and prim.IsValid(), "No /World/Cube prim — add `def Cube \"Cube\" { }` inside /World."
+      assert prim.GetTypeName() == "Cube", f"/World/Cube must be a Cube, got {prim.GetTypeName()!r}."
 
   - id: default_prim_set
     description: "The stage declares /World as its defaultPrim"
     check: |
       dp = stage.GetDefaultPrim()
-      assert dp and dp.IsValid(), "No defaultPrim set on the stage"
-      assert str(dp.GetPath()) == "/World", f"defaultPrim must be /World, got {dp.GetPath()}"
+      assert dp and dp.IsValid(), "No defaultPrim set — add `( defaultPrim = \"World\" )` after the #usda header."
+      assert str(dp.GetPath()) == "/World", f"defaultPrim must be /World, got {dp.GetPath()}."
 
 reward:
   xp: 50

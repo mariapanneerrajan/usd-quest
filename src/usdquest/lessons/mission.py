@@ -61,6 +61,8 @@ class Mission:
     story: str
     mission_dir: Path
     objectives: tuple[Objective, ...]
+    lesson: str = ""  # Markdown — taught *before* the player tries the objectives
+    hints: tuple[str, ...] = ()  # Progressive on-demand hints
     reward: Reward = field(default_factory=Reward)
     starter_stage: str | None = None
     target_stage: str = "player.usda"
@@ -87,6 +89,9 @@ def load_mission(mission_yaml: Path) -> Mission:
     reward_data = data.get("reward", {}) or {}
     reward = Reward(xp=int(reward_data.get("xp", 0)), badge=reward_data.get("badge"))
 
+    hints_raw = data.get("hints") or []
+    hints = tuple(h.strip() for h in hints_raw if isinstance(h, str) and h.strip())
+
     return Mission(
         id=data["id"],
         act=int(data["act"]),
@@ -94,6 +99,8 @@ def load_mission(mission_yaml: Path) -> Mission:
         story=data.get("story", "").strip(),
         mission_dir=mission_dir,
         objectives=objectives,
+        lesson=(data.get("lesson") or "").strip(),
+        hints=hints,
         reward=reward,
         starter_stage=data.get("starter_stage"),
         target_stage=data.get("target_stage", "player.usda"),
