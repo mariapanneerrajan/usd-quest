@@ -1,0 +1,34 @@
+id: act1_m01_hello_stage
+act: 1
+title: "Hello, Stage"
+story: |
+  Welcome to the studio. Your first task is dead simple:
+  open the starter file and author a single Cube prim at /World/Cube.
+  Everything in OpenUSD starts with a prim — this one's yours.
+starter_stage: starter.usda
+target_stage: player.usda
+objectives:
+  - id: world_xform_exists
+    description: "/World is defined as an Xform"
+    check: |
+      prim = stage.GetPrimAtPath("/World")
+      assert prim and prim.IsValid(), "No /World prim"
+      assert prim.GetTypeName() == "Xform", f"/World must be an Xform, got {prim.GetTypeName()!r}"
+
+  - id: cube_exists
+    description: "/World/Cube is a Cube prim"
+    check: |
+      prim = stage.GetPrimAtPath("/World/Cube")
+      assert prim and prim.IsValid(), "No /World/Cube prim"
+      assert prim.GetTypeName() == "Cube", f"/World/Cube must be a Cube, got {prim.GetTypeName()!r}"
+
+  - id: default_prim_set
+    description: "The stage declares /World as its defaultPrim"
+    check: |
+      dp = stage.GetDefaultPrim()
+      assert dp and dp.IsValid(), "No defaultPrim set on the stage"
+      assert str(dp.GetPath()) == "/World", f"defaultPrim must be /World, got {dp.GetPath()}"
+
+reward:
+  xp: 50
+  badge: first_stage
